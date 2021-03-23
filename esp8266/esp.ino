@@ -1,5 +1,5 @@
-#define ag_ismi "ILKER"  //Wifi adı>>Wifi name
-#define ag_sifresi "ilkeraykut07"  //Wifi şifresi>>Wifi password
+#define ag_ismi "*****"  //Wifi adı>>Wifi name
+#define ag_sifresi "*******"  //Wifi şifresi>>Wifi password
 
 String metin;
 
