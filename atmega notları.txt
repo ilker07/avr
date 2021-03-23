@@ -1,0 +1,125 @@
+İNTERRUPTLAR
+1.External Interrupt Ayarları
+External Interrupt Register Control A Interrupt Üretir.(Ne çeşit olacağını önce bu belirlenir.)
+External Interrupt Mask Register INT0 ya da INT1 i aktif eder(2. işlem)
+
+
+2.Pin Change Interrupt Ayarları
+Pin Change Interrupt Control Register Hangi Pin aralığı belirlenir.
+Belirlenen aralığa göre PCMSK2,PCMSK1,PCMSK0 bunlar belirlenir.
+
+
+
+PİN KONFİGÜRASYONU
+
+TOSC2:ASSR içindeki AS2 bir yapılır.EXCLK sıfır yapılır.PB7 disconnect.Arduinoda PCINT7 olarak kristal olarak kullanılır.
+TOSC1:ASSR içindeki AS2 bir yapılır.PB6 disconnect.PCINT6.
+SCK/PCINT5 köle olarak kullanılırsa DDB5 PORTB5 tarafından kontrol edilir.
+MISO/PCINT4  DDB4 VE PORTB4.SPI Master ise DDB4 1 yapılır.(Giriş olarak yapılandırma).SPI Köle ise veri yönü DDB4 tarafından belirlenir.
+MOSI/OC2/PCINT3 SPI köle ise DDB3 1 yapılır.(Giriş olarak yapılandırma)SPI Master ise veri yönü DDB3 tarafından belirlenir.
+OC2 :PB3 pini Timer/Counter2 harici çıkış olarak kullanılabilir.PB3 1 yapılır.PWM için de kullanılabilir.
+SS/OC1B/PCINT2:SPI Köle ise DDB2 1 yapılır.(Giriş olarak yapılandırma).Pinde düşük seviye görüldüğü zaman SPI aktifleşir.
+OC1B:Timer/Counter1B DDB2 1 yapılır.
+OC1A:Timer/Counter1A DDB1 1 yapılır.
+
+
+
+
+TİMER0 MODLARI
+
+CTC MOD (iSTEDİĞİMZ SAYIYA AYARLANDIĞINDA )
+In Clear Timer on Compare or CTC mode (WGM02:0 = 2), the OCR0A Register is used to manipulate the
+counter resolution.CTC modunda TCNT0=OCR0A olursa counter sıfırlanır.(TCNT0) temizlenir.Flag olur.CTC için WGM ayarları yap.N için ayarları yap.
+
+
+TCNT0=0 olarak başla.
+(COM0A1:0 = 1).toggle için.fOCnx=Osilator frekansı /2*N*(1+OCRnx) burdan 1/fOCnx ile istenen süre.Burada OCRnx=125 gibi bir sayı yazılır.
+
+
+FAST PWM MOD
+
+(WGM02:0 = 3 or 7) TOP değeri.WGM02:0=3 olduğunda TOP=0xFF;WGM02:0=7 olduğunda TOP=OCR0A.
+Frekans ayarlama OC0x pinleri üzreinde. fOCnx=Osilator/256*N
+
+
+
+TİMER1 FAST PWM fOCnxPWM=fosc/N*(1+TOP)
+
+
+
+USART MODU
+
+UCSRnC içindeki UMSELn biti asenkron ya da senkron modu seçer.
+Double Speed modu(asenkron) UCSRnA içindeki U2Xn tarafından kontrol edilir.Senkron modda U2Xn=0 yapılır.
+(UMSELn=1)senkron mod.XCKn pini saat kaynağının harici ya da dahili olduğunu kontrol eder.
+Senkron saat modunda UCPOLn=1 ise veri XCK nın düşen kenarında örneklenir.0 ise yükselen kenarında.
+
+
+UCSZn2:0, UPMn1:0 and USBSn bitleri 1 lenir.(Frame Formatı)
+
+USART çalışması için Global Interrupt Flag temizlenmelidir.
+
+TXCn bayrağı transferin tamamlandığını kontrol etmek için kullanılabilir.
+RXCn bayrağı okunmamış veri olup olmadığını kontrol etmek için kullanılabilir.
+
+Her iletimden önce TXCn bayrağı temizlenmelidir.
+
+USART iletimi UCSRnB Registerındaki TXEN=1 yapılır.
+
+UDREn 1 ise boş 0 ise veri var.
+
+
+
+SPI MODU
+
+Mod0 ve mod1 sck low 
+Mod2 ve Mod3 sck high
+
+leading edge de okumalar yapılır.
+
+
+ADC 
+
+ADEN 1 YAPILIR.ADPS PRESCALER AYARLARI.MUX AYARLARI.
+ADSC 1 YAPILARAK DÖNÜŞÜM BAŞLAR.0 OLDUĞUNDA DÖNÜŞÜM BİTER.
+
+
+I2C
+
+READ/WRİTE 1 İSE READ 0 İSE WRİTE 
+
+
+TWI biti(TWEN)  olmalı I2C aktif olması için.
+TWSTA 1 olmalı (START )
+TWINT 1 bayrağı temizlemek için.
+
+
+scl high iken data stable.
+
+Slave adreslendiğinde sda low olmalı.olmadığında high olmalı.
+Adres paketi slave adresi ve read veya write dan oluşur.
+öncelikle yüksek baytlı kısım gönderilir.
+
+MT modunda TWEN 1 yapılmalı. TWDRn ye SLA+W yazılmalı.TWINT 1 yazılmalı.TWDR 1.(SON BİTE KADAR BUNLAR YAPILIR).
+MR modunda twen twsta twınt 1 yazılmalı.
+
+slave t modu
+TWGCI=1 olmalı.TWEA=1 TWSTA=0 TWSTO=0
+Tranfer sırasında TWEA 0 OLURSA transfer biter.
+
+
+
+
+
+Vıl ınput low    min -0.5   max 0.3 x Vcc
+Vıh  ınput high  min  0.7x Vcc  max Vcc+0.5
+
+272 den devam
+
+
+
+
+
+
+
+
